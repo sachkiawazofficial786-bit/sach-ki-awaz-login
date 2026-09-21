@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سچ کی آواز — Protected Website</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#f4f7fb;color:#10233f}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#f4f7fb;z-index:10}
+.loader{background:#fff;border:1px solid #e4e8ef;border-radius:20px;padding:30px 40px;text-align:center;box-shadow:0 15px 45px #10233f18}
+.loader .logo{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;margin:0 auto 15px;background:#10233f;color:#fff;border:3px solid #c9a227;font-size:24px;font-weight:800}
+#app{display:none;height:100vh;flex-direction:column}
+header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#10233f;color:#fff;box-shadow:0 2px 12px #0002;direction:ltr}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand .mini{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#10233f;border:2px solid #c9a227}
+.actions{display:flex;align-items:center;gap:8px}.actions span{font-size:12px;opacity:.85;direction:rtl}.actions button{border:1px solid #ffffff44;background:#fff;color:#10233f;border-radius:9px;padding:9px 13px;font-weight:700;cursor:pointer}
+main{flex:1;min-height:0;position:relative;background:#fff}
+iframe{width:100%;height:100%;border:0;background:#fff}
+.notice{position:absolute;inset:0;display:none;place-items:center;background:#fff;z-index:2;text-align:center;padding:25px}.notice-box{max-width:520px}.notice h2{margin:0 0 10px}.notice p{color:#667085;line-height:1.7}.notice a{display:inline-block;margin-top:10px;padding:12px 18px;background:#10233f;color:#fff;text-decoration:none;border-radius:10px;font-weight:700}
+</style>
+</head>
+<body>
+<div id="loading"><div class="loader"><div class="logo">سچ</div><strong>سچ کی آواز</strong><p>محفوظ ویب سائٹ لوڈ ہو رہی ہے...</p></div></div>
+<div id="app">
+<header>
+<div class="brand"><div class="mini">سچ</div><span>سچ کی آواز</span></div>
+<div class="actions"><span id="user"></span><button id="logout">Logout</button></div>
+</header>
+<main>
+<iframe id="site" title="Sach Ki Awaz Website" src="https://sites.google.com/view/sachkiawaz/%D9%87%D9%88%D9%85"></iframe>
+<div class="notice" id="notice"><div class="notice-box"><h2>Website embed blocked</h2><p>Google Sites نے اس صفحے کو embed ہونے سے روکا ہے۔ آپ authenticated ہیں؛ website کو الگ window میں کھول سکتے ہیں۔</p><a href="https://sites.google.com/view/sachkiawaz/%D9%87%D9%88%D9%85" target="_blank" rel="noopener">Open Sach Ki Awaz</a></div></div>
+</main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyD0CmQS7agqnG15ErAtEToD627KeDij20Q",authDomain:"sachkiawaz786.firebaseapp.com",projectId:"sachkiawaz786",storageBucket:"sachkiawaz786.firebasestorage.app",messagingSenderId:"56855864275",appId:"1:56855864275:web:2f05336386790eb16c4526"};
+const auth=getAuth(initializeApp(firebaseConfig));
+const login="./index.html";
+const app=document.getElementById("app"),loading=document.getElementById("loading"),user=document.getElementById("user");
+document.getElementById("logout").onclick=async()=>{await signOut(auth);location.replace(login)};
+const frame=document.getElementById("site"),notice=document.getElementById("notice");
+frame.addEventListener("load",()=>{setTimeout(()=>{try{const d=frame.contentDocument;if(!d||!d.body||d.body.innerText.trim().length<20)notice.style.display="grid"}catch(e){/* cross-origin: browser prevents inspection; keep iframe */}},1500)});
+onAuthStateChanged(auth,u=>{if(!u){location.replace(login);return}user.textContent=(u.displayName||"User")+" • "+u.email;loading.style.display="none";app.style.display="flex"});
+</script>
+</body>
+</html>
